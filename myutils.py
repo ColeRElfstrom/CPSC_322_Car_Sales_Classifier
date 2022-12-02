@@ -203,7 +203,7 @@ def discretize_sales_price(prices):
     print(max_price)
 
 def clean_data(table):
-    sales = table.get_column("price")
+    sales = table.get_column("pricesold")
     remove_indexes = []
     for index, sale in enumerate(sales):
         if sale == 0:

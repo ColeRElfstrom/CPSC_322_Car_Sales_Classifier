@@ -190,3 +190,24 @@ def print_tree(tree, header, attribute_names, class_name, string):
             print_tree(value_list[2], header, attribute_names, class_name, string + " AND " + str(attribute_names[att_index]) + " == " + str(value_list[1]))
 
 
+def discretize_sales_price(prices):
+    """Divides the given sales price into a range of 1-10
+    Args:
+        value
+    Returns:
+        discretization (int)
+    """
+    max_price = max(prices)
+    min_price = min(prices)
+    print(min_price)
+    print(max_price)
+
+def clean_data(table):
+    sales = table.get_column("price")
+    remove_indexes = []
+    for index, sale in enumerate(sales):
+        if sale == 0:
+            remove_indexes.append(index)
+    table.drop_rows(remove_indexes)
+
+    return table

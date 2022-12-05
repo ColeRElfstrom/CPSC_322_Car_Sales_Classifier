@@ -1,4 +1,6 @@
+from statistics import mean
 import numpy as np
+import matplotlib.pyplot as plt
 
 def parallel_sort(distances, indices):
     indices_result = [x for _, x in sorted(zip(distances, indices))]
@@ -197,10 +199,43 @@ def discretize_sales_price(prices):
     Returns:
         discretization (int)
     """
+    discritized_prices = []
     max_price = max(prices)
     min_price = min(prices)
+    avg_price = mean(prices)
+    print(avg_price)
     print(min_price)
     print(max_price)
+    for price in prices:
+        discritized_prices.append(individual_discretize(price))
+
+    ranges = [0, 2500, 5000, 7500, 12500, 20000, 35000, 50000, 75000, 100000, 200000]
+
+    return discritized_prices, ranges
+
+def individual_discretize(price):
+    if price >= 200000:
+        return 10
+    if price >= 100000:
+        return 9
+    if price >= 75000:
+        return 8
+    if price >= 50000:
+        return 7
+    if price >= 35000:
+        return 6
+    if price >= 20000:
+        return 5
+    if price >= 12500:
+        return 4
+    if price >= 7500:
+        return 3
+    if price >= 5000:
+        return 2
+    if price >= 2500:
+        return 1
+    else:
+        return 0
 
 def clean_data(table):
     sales = table.get_column("pricesold")
@@ -211,3 +246,16 @@ def clean_data(table):
     table.drop_rows(remove_indexes)
 
     return table
+
+def plot_prices(prices, ranges):
+    class_counts = []
+    for value in range(11):
+        class_counts.append(int(prices.count(value)))
+    print(class_counts)
+    xrng = np.arange(len(ranges))
+    print(xrng)
+    plt.figure()
+    plt.bar(xrng, class_counts)
+    plt.xticks(xrng, ranges, rotation=45)
+    
+    

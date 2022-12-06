@@ -181,7 +181,7 @@ class MyPyTable:
         i = 0
         for row in self.data:
             for value in row:
-                if value == "NA":
+                if value == "":
                     idxs.append(row_idx)
             row_idx += 1
         for value in idxs:

@@ -529,6 +529,7 @@ class MyRandomForestClassifier:
         self.Fparam = None
         self.Nparam = None
         self.Mparam = None
+        self.tree_list = []
 
 
     def fit(Fparam, Nparam, Mparam):

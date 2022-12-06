@@ -1,4 +1,5 @@
 import numpy as np
+from mypytable import MyPyTable
 
 def parallel_sort(distances, indices):
     indices_result = [x for _, x in sorted(zip(distances, indices))]
@@ -189,4 +190,35 @@ def print_tree(tree, header, attribute_names, class_name, string):
         else: 
             print_tree(value_list[2], header, attribute_names, class_name, string + " AND " + str(attribute_names[att_index]) + " == " + str(value_list[1]))
 
+def create_MyPyTable_for_auto_set(auto_dataset):
+    price_sold = auto_dataset.get_column("pricesold")
+    year_sold = auto_dataset.get_column("yearsold")
+    mileage = auto_dataset.get_column("Mileage")
+    make = auto_dataset.get_column("Make")
+    model = auto_dataset.get_column("Model")
+    year = auto_dataset.get_column("Year")
+    body_type = auto_dataset.get_column("BodyType")
+    num_cylinders = auto_dataset.get_column("NumCylinders")
+    drive_type = auto_dataset.get_column("DriveType")
 
+    auto_dataset_explored = MyPyTable(column_names=["pricesold","yearsold","Mileage","Make","Model","Year","BodyType","NumCylinders","DriveType"])
+
+    for i in range(0, len(price_sold)):
+        auto_dataset_explored.data.append([price_sold[i], year_sold[i], mileage[i], make[i], model[i], year[i], body_type[i], num_cylinders[i], drive_type[i]])
+    return auto_dataset_explored
+
+def create_X_train_for_auto_set_without_prices(auto_dataset):
+    year_sold = auto_dataset.get_column("yearsold")
+    mileage = auto_dataset.get_column("Mileage")
+    make = auto_dataset.get_column("Make")
+    model = auto_dataset.get_column("Model")
+    year = auto_dataset.get_column("Year")
+    body_type = auto_dataset.get_column("BodyType")
+    num_cylinders = auto_dataset.get_column("NumCylinders")
+    drive_type = auto_dataset.get_column("DriveType")
+
+    auto_dataset_explored = []
+    for i in range(0, len(year_sold)):
+        auto_dataset_explored.append([year_sold[i], mileage[i], make[i], model[i], year[i], body_type[i], num_cylinders[i], drive_type[i]])
+
+    return auto_dataset_explored

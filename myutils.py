@@ -257,5 +257,10 @@ def plot_prices(prices, ranges):
     plt.figure()
     plt.bar(xrng, class_counts)
     plt.xticks(xrng, ranges, rotation=45)
+
+def compute_random_subset(values, num_values):
+    values_copy = values[:] # shallow copy
+    np.random.shuffle(values_copy) # in place shuffle
+    return values_copy[:num_values]
     
     

@@ -520,12 +520,15 @@ class MyDecisionTreeClassifier:
         pass # TODO: (BONUS) fix this
 class MyRandomForestClassifier:
 
-    def __init__(self):
+    def __init__(self, F, N, M):
         """Initializer for MyRandomForestClassifier.
         """
         self.X_train = None
         self.y_train = None
-        
+        self.header = None
+        self.F = F
+        self.N = N
+        self.M = M
 
 
     def fit():

@@ -24,7 +24,14 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     # basic approach (uses recursion!!):
     #print("available attributes: ", available_attributes)
     # select an attribute to split on
-    split_attribute = select_attribute(current_instances, available_attributes, class_index, header)
+    
+    # ADDED FOR PROJECT BASED OFF NOTES IN ENSEMBLE FUN
+    subset = compute_random_subset(available_attributes, len(available_attributes))
+    split_attribute = select_attribute(current_instances, subset, class_index, header)
+    # ADDED FOR PROJECT BASED OFF NOTES IN ENSEMBLE FUN
+
+
+    #split_attribute = select_attribute(current_instances, available_attributes, class_index, header)
     #print("splitting on: ", split_attribute)
     available_attributes.remove(split_attribute)
     # cannot split on this attribute again in this branch of the tree
@@ -263,4 +270,11 @@ def compute_random_subset(values, num_values):
     np.random.shuffle(values_copy) # in place shuffle
     return values_copy[:num_values]
     
-    
+def compute_bootstrapped_sample(table):
+    n = len(table)
+    # np.random.randint(low, high) returns random integers from low (inclusive) to high (exclusive)
+    sampled_indexes = [np.random.randint(0, n) for _ in range(n)]
+    sample = [table[index] for index in sampled_indexes]
+    out_of_bag_indexes = [index for index in list(range(n)) if index not in sampled_indexes]
+    out_of_bag_sample = [table[index] for index in out_of_bag_indexes]
+    return sample, out_of_bag_sample

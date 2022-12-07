@@ -85,6 +85,24 @@ class MyPyTable:
                     self.data[self.data.index(row)][row.index(value)] = new_val
                     converted = 0
 
+    def convert_to_int(self):
+        """Try to convert each value in the table to a numeric type (int).
+
+        Notes:
+            Leave values as is that cannot be converted to numeric.
+        """
+        converted = 0
+        for row in self.data:
+            for value in row:
+                try:
+                    new_val = int(value)
+                    converted = 1
+                except:
+                    pass
+                if converted:
+                    self.data[self.data.index(row)][row.index(value)] = new_val
+                    converted = 0
+
     def drop_rows(self, row_indexes_to_drop):
         """Remove rows from the table data.
 

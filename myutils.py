@@ -207,12 +207,6 @@ def discretize_sales_price(prices):
         discretization (int)
     """
     discritized_prices = []
-    max_price = max(prices)
-    min_price = min(prices)
-    avg_price = mean(prices)
-    print(avg_price)
-    print(min_price)
-    print(max_price)
     for price in prices:
         discritized_prices.append(individual_discretize(price))
 
@@ -258,9 +252,7 @@ def plot_prices(prices, ranges):
     class_counts = []
     for value in range(11):
         class_counts.append(int(prices.count(value)))
-    print(class_counts)
     xrng = np.arange(len(ranges))
-    print(xrng)
     plt.figure()
     plt.bar(xrng, class_counts)
     plt.xticks(xrng, ranges, rotation=45)

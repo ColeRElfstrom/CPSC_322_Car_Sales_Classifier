@@ -270,3 +270,48 @@ def compute_bootstrapped_sample(table):
     out_of_bag_indexes = [index for index in list(range(n)) if index not in sampled_indexes]
     out_of_bag_sample = [table[index] for index in out_of_bag_indexes]
     return sample, out_of_bag_sample
+
+
+def X_train_bodystyle_noise_reduction(X_train):
+    pickup = ['Pickup',"Standard Cab Pickup", 'Crew Cab Pickup','Extended Cab Pickup','Pickup (Truck)','Regular Cab Pickup','Pickup Truck','Truck',
+        'Cab & Chassis','truck','Pick Up','Quad Cab Extended Pickup', 'Crew Cab Chassis-Cab', 'Short Bed','Double Cab/Long Bed',
+        'Standard cab Short bed','Extended Crew Cab Pickup','DUMP','Access Cab','PICKUP','Short bed pickup','Pick up',
+        "I think it's a Styleside, Long Bed",'REGULAR CAB','4DR 4x4 Pickup Truck','step side short bed','pick up']
+    for val in X_train:
+        if val[3] in pickup:
+            val[3] = "pickup"
+
+    sedan = ['Sedan','4dr Car','4 Door','Four-Door Hardtop','4 DOOR SEDAN','Sport Sedan','Touring','4 Door White','SEDAN']
+    for val in X_train:
+        if val[3] in sedan:
+            val[3] = "sedan"
+
+    coupe = ['Coupe','Fastback','hardtop','2dr Car','2 Door Coupe','2 Dr','Hardtop 2 Door','Targa','Fastback Coupe','2-Seat Roadster','2d : 2 Door Hard TOP',
+        'Hardtop','Victoria Coupe','Tudor','2DR Ht','Hardtop Fastback','T-Top','2 Door Sport Coupe','Roadster', 'Coupe with Removable Top','2 door',
+        '2 door coupe deluxe','roadster', '2 door post','2-DOOR HARD TOP COUPE','2 Door','2 door Hardtop','Beetle','2 Door Hardtop''Hard top','MR2 Spyder conv.',]
+    for val in X_train:
+        if val[3] in coupe:
+            val[3] = "coupe"
+
+    SUV = ['SUV','Sport Utility','Minivan', 'Mini-van, Passenger','4D Sport Utility',
+        'CHASSIS', 'JEEP','Conv', 'Suv','Sport Utility AWD Navi','Utility Body','suburban','its a CJ !!']
+    for val in X_train:
+        if val[3] in SUV:
+            val[3] = "suv"
+
+    Van = ['Standard Passenger Van','CONVERSION VAN', 'Van','Extended Passenger Van', 'Van Camper',
+        'HighTop Conversion Van', 'High roof 144 walk through van', 'Minivan/Van', 'Full-size Cargo Van','CARGO', 'mid-bus',
+        'cargo van', 'Microbus','Bus', 'VAN','Cargo Van']
+    for val in X_train:
+        if val[3] in Van:
+            val[3] = "van"
+
+    other = ['Convertible', '', 'Limousine', 'Hatchback', 'Wagon', 'Hardtop Convertible', 'Converible', 'LL', '--',
+        '4 door limo', 'WAGON', 'Hard top', '2 Door Convertible', '2 door covertable', 'Hearse', 'Convertible Coupe',
+        'Station Wagon', 1966.0, 'Superior Hearse', 'Other', 'Silver Spirit', 'Rally', 'SWB']
+    for val in X_train:
+        if val[3] in other:
+            val[3] = "other"
+
+    
+

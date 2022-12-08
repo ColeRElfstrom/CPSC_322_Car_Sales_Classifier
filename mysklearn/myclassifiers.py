@@ -1,4 +1,4 @@
-from mysklearn import myutils as u
+import myutils as u
 import numpy as np
 class MySimpleLinearRegressor:
     """Represents a simple linear regressor.

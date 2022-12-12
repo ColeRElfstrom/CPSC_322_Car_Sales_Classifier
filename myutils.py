@@ -346,7 +346,39 @@ def clean_drive_type(X_train):
         if val[5] in fourwd:
             val[5] = "4WD"
     
-    allwd = ['35t Premium AWD','AWD(ALL WHEEL DRIVE)',]
+    allwd = ['35t Premium AWD','AWD(ALL WHEEL DRIVE)','Symmetrical AWD',
+            'AWD 4dr','Symmetrical AWD','4dr Sdn 535i xDrive AWD']
     for val in X_train:
         if val[5] in allwd:
             val[5] = "AWD"
+    
+    fwd = ['Left hand drive', '', 'FWD','2WD 5dr LX','2WD 4dr SXT','4dr Sdn LS Premium',
+            '4dr Sdn Standard','2WD 4dr Premium','Automatic','Left hand','4dr HB SXT',
+            '2WD','Platinum 3.5L','4dr Sdn Signature Gorgeous','4dr Sdn Signature Limited',
+            '4dr Sdn LT','Fwd','4dr Sdn I4 Manual 2.5','5dr 7-Pass Van XLE FWD (Natl)',
+            '4dr Sdn LX','4dr Sdn LE (Natl)','2dr Convertible LXi', '4dr Sdn Signature', 'standard']
+    for val in X_train:
+        if val[5] in fwd:
+            val[5] = "FWD"
+
+    rwd = ['Rwd', '4 SPEED', '4dr Sdn S 550 RWD', 'Rear Wheel',
+     'rear', '2 door Coupe', '--', '4dr Sedan 300SDL', '2dr Conv 435i RWD',
+      'REAR WHEEL DRIVE', 'R', 'rwd', '2dr Conv GXP', 'rear engine',
+       '2 wheel drive', '2wd', 'Rear wheel', 'Rear',
+        '2dr Conv Manual (Natl)', '2dr Roadster Limited', '4X2',
+         '5dr HB Auto Sport', '2 Door Convertible', 'RWD(REAR WHEEL DRIVE)',
+          'RWD 2500 155 YF7 Upfitter', '4dr Wagon', '4dr Sedan 735i',
+           '2dr Convertible GT', '2dr Cpe 328i RWD', '2dr Conv SS w/2SS',
+            '4dr Sdn Premium Luxury', '2dr Hatchback Coupe 2+2 GS 5-Spd', 
+            '2dr Roadster 5.0L', '2 wheel drive - rear', 'Convertible',
+             '2 Door Coupe', 'E-250 Recreational', '4 Door Sedan', 
+             '4dr Sdn 328i RWD', '2dr Fastback V6', '4dr H6 Auto 3.0R Ltd',
+              '2dr Coupe Classic', '2dr Cpe Shelby GT500', 
+              '2dr Cpe SXT Plus', '2dr Convertible Deluxe', 'automatic',
+               '325Ci 2dr Convertible', 'Rear Wheel Drive', 'REAR WHEEL',
+                '2dr Cabriolet E 400 RWD', '2WD Ext Cab 143.5 SLE',
+                 '2dr Cpe GT', '2WD Crew Cab 172 Lariat',
+                  'RWD with Traction Lok Axle']
+    for val in X_train:
+        if val[5] in rwd:
+            val[5] = "RWD"

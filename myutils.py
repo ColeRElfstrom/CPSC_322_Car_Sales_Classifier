@@ -313,5 +313,40 @@ def X_train_bodystyle_noise_reduction(X_train):
         if val[3] in other:
             val[3] = "other"
 
-    
+def clean_cylinder_count(X_train):
+    for val in X_train:
+        if val[4] == 6.0:
+            val[4] = "6"
+        elif val[4] == 4.0:
+            val[4] = "4"
+        elif val[4] == 8.0:
+            val[4] = "8"
+        elif val[4] == 0.0:
+            val[4] = "0"
+        elif val[4] == 5.0:
+            val[4] = "5"
+        elif val[4] == 3.0:
+            val[4] = "3"
+        elif val[4] == 10.0:
+            val[4] = "10"
+        elif val[4] == 12.0:
+            val[4] = "12"
+        elif val[4] == 1.0:
+            val[4] = "1"
+        elif val[4] == 2.0:
+            val[4] = "2"
 
+def clean_drive_type(X_train):
+    fourwd = [4.0, '4WD SuperCrew 145 XLT','4x4','4WD (FOUR WHEEL DRIVE)','4WD 4dr 1500 LTZ w/3LT',
+                '4WD 4dr Premium', "Platinum 4x4 SuperCrew 5.5' Box", '4X4 CrewCab XLT-SPORTS APPEARANCE',
+                '4X4 / 4X2','Reg Cab 117.5 WB 4WD','4WD 4dr V6 SR5 Sport (Natl)','Double 141 Auto 4WD (SE)',
+                '4wd','4dr 4WD Luxury','Altitude 4x4 *Ltd Avail*','4WD 4dr','4X4/2X4','HSE Luxury V6 Supercharged', 
+                'Crew Cab 139 XLT 4WD','4WD 4dr Supercharged','4WD 4dr LE','4X4','4 X 4']
+    for val in X_train:
+        if val[5] in fourwd:
+            val[5] = "4WD"
+    
+    allwd = ['35t Premium AWD','AWD(ALL WHEEL DRIVE)',]
+    for val in X_train:
+        if val[5] in allwd:
+            val[5] = "AWD"

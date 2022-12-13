@@ -382,3 +382,41 @@ def clean_drive_type(X_train):
     for val in X_train:
         if val[5] in rwd:
             val[5] = "RWD"
+
+def discretize_year(years):
+    """Divides the given sales price into a range of 1-10
+    Args:
+        value
+    """
+    for year in years:
+        year[2] = individual_discretize_year(year[2])
+
+def individual_discretize_year(price):
+    if price >= 2020:
+        return "2020s"
+    elif price >= 2010:
+        return "2010s"
+    elif price >= 2000:
+        return "2000s"
+    elif price >= 1990:
+        return "1990s"
+    elif price >= 1980:
+        return "1980s"
+    elif price >= 1970:
+        return "1970s"
+    elif price >= 1960:
+        return "1960s"
+    elif price >= 1950:
+        return "1950s"
+    elif price >= 1940:
+        return "1940s"
+    elif price >= 1930:
+        return "1930s"
+    elif price >= 1920:
+        return "1920s"
+    elif price >= 1910:
+        return "1910s"
+    elif price >= 1900:
+        return "1900s"
+    else:
+        return "pre 1900"

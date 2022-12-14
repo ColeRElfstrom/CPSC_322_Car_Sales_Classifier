@@ -17,7 +17,7 @@ def dist_for_categorical(v1, v2):
     else:
         return 1
 
-def tdidt(current_instances, available_attributes, attribute_domains, class_index, header, case_3_instances = None, case_3_available_attributes = None):
+def tdidt(current_instances, available_attributes, attribute_domains, class_index, header, F, case_3_instances = None, case_3_available_attributes = None):
     if case_3_instances == None:
         case_3_instances = current_instances
     if case_3_available_attributes == None:
@@ -25,6 +25,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     # basic approach (uses recursion!!):
     #print("available attributes: ", available_attributes)
     # select an attribute to split on
+    available_attributes = compute_random_subset(available_attributes, F)
     split_attribute = select_attribute(current_instances, available_attributes, class_index, header)
     #print("splitting on: ", split_attribute)
     available_attributes.remove(split_attribute)
@@ -45,6 +46,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     for att_value, att_partition in partitions.items():
         total_length += len(att_partition)
     case_3_total_length = len(case_3_instances)
+    print(list(partitions.keys()))
     for att_value in sorted(list(partitions.keys())):
         att_partition = partitions[att_value]
         value_subtree = ["Value", att_value]
@@ -83,7 +85,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
         # none of the base cases were true... recurse
         else:
             #print("recursing")
-            subtree = tdidt(att_partition, available_attributes.copy(), attribute_domains, class_index, header, current_instances.copy(), case_3_available_attributes.copy())
+            subtree = tdidt(att_partition, available_attributes.copy(), attribute_domains, class_index, header, F, current_instances.copy(), case_3_available_attributes.copy())
             value_subtree.append(subtree)
         if value_subtree != None:
             tree.append(value_subtree)
@@ -261,6 +263,6 @@ def forest(X, y, N, F):
                 temp_X.append(X[rand_index])
                 temp_y.append(y[rand_index])
         tree = MyDecisionTreeClassifier()
-        tree.fit(temp_X, temp_y)
+        tree.fit(temp_X, temp_y, F)
         forest.append(tree)
     return forest

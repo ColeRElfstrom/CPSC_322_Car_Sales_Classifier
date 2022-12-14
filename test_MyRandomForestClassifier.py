@@ -36,9 +36,12 @@ def test_MyRandomForestClassifier_fit():
         remainder_set.append(row)
 
     rf_clf = MyRandomForestClassifier()
-    rf_clf.fit(remainder_set, 20, 7, 2)
+    rf_clf.fit(remainder_set, 100, 20, 4)
 
+    for tree in rf_clf.tree_list:
+        print(tree.tree)
 
+    
     assert len(rf_clf.tree_list) == 20
 
 

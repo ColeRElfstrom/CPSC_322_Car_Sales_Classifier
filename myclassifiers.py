@@ -1,5 +1,6 @@
 from mysklearn import myutils as u
 import numpy as np
+from mysklearn import myevaluation
 class MySimpleLinearRegressor:
     """Represents a simple linear regressor.
 
@@ -526,15 +527,41 @@ class MyRandomForestClassifier:
         self.X_train = None
         self.y_train = None
         self.header = None
-        self.Fparam = None
-        self.Nparam = None
-        self.Mparam = None
+        self.F = None
+        self.N = None
+        self.M = None
         self.tree_list = []
 
 
-    def fit(Fparam, Nparam, Mparam):
+    def fit(self, table, N, M, F):
+
+        self.N = N
+        self.M = M
+        self.F = F
+
+        X, y = u.train_splits(table)
+        X_train, X_test, y_train, y_test = myevaluation.train_test_split(X, y, shuffle=True)
+
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
+
+        remainder_set = []
+        for i, row  in enumerate(X_train):
+            row.append(y_train[i])
+            remainder_set.append(row)
+
         
-        # TODO fix this
+        training_sample, validation_sample = u.compute_bootstrapped_sample(table)
+        print("training instances:")
+        for row in training_sample:
+            print(row)
+        print("validation instances:")
+        for row in validation_sample:
+            print(row)
+        
+
         pass
 
     def predict():

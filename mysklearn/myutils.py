@@ -218,3 +218,33 @@ def create_X_train_for_auto_set_without_prices(auto_dataset):
         auto_dataset_explored.append([year_sold[i], make[i], year[i], body_type[i], num_cylinders[i], drive_type[i]])
 
     return auto_dataset_explored
+
+def train_splits(table):
+    """
+    Breaks table into X and y for random forrest classification
+            data: the table to split            
+    """
+    X = []
+    y = []
+    for row in table:
+        X.append(row[:-1])
+        y.append(row[-1])
+    
+    return X, y
+
+def compute_bootstrapped_sample(table):
+    n = len(table)
+    # np.random.randint(low, high) returns random integers from low (inclusive) to high (exclusive)
+    sampled_indexes = [np.random.randint(0, n) for _ in range(n)]
+    sample = [table[index] for index in sampled_indexes]
+    out_of_bag_indexes = [index for index in list(range(n)) if index not in sampled_indexes]
+    out_of_bag_sample = [table[index] for index in out_of_bag_indexes]
+    return sample, out_of_bag_sample
+
+
+def compute_random_subset(values, num_values):
+    # could use np.random.choice()
+    # I'll use np.random.shuffle() and slicing
+    values_copy = values.copy() # shallow copy
+    np.random.shuffle(values_copy) # inplace shuffle
+    return values_copy[:num_values]

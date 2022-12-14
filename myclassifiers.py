@@ -574,12 +574,18 @@ class MyRandomForestClassifier:
             final_forest.append(full_forest[i[0]])
         self.tree_list = final_forest
 
-    def predict(self, X_test, header):
-
+    def predict(self, X_test, y_test):
+        
         y_pred = []
-        for row in X_test:           
-            predictions = []
-            for tree in self.tree_list:
-                predictions.append(u.tdidt_predict(tree.tree, row, header))
-            y_pred.append(max(predictions, key=predictions.count))
-        return y_pred
+        tree_accuracy = []
+        for tree in self.tree_list:
+            predicted = tree.predict(X_test)
+            y_pred.append(predicted)
+            tree_accuracy.append(myevaluation.accuracy_score(y_test, predicted))
+
+        # for row in X_test:           
+        #     predictions = []
+        #     for tree in self.tree_list:
+        #         predictions.append(u.tdidt_predict(tree.tree, row, tree.header))
+
+        return y_pred[tree_accuracy.index(max(tree_accuracy))]

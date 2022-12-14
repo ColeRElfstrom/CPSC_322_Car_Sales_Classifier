@@ -533,24 +533,26 @@ class MyRandomForestClassifier:
         self.tree_list = []
 
 
-    def fit(self, table, N, M, F):
+    def fit(self, X_train, y_train, X_test, y_test, N, M, F):
 
         self.N = N
         self.M = M
         self.F = F
 
-        X, y = u.train_splits(table)
+        #X, y = u.train_splits(table)
 
-        self.X_train = X
-        self.y_train = y
+        self.X_train = X_train
+        self.y_train = y_train
 
         
-        training_sample, validation_sample = u.compute_bootstrapped_sample(table)
+        # training_sample, validation_sample = u.compute_bootstrapped_sample(table)
+        training_sample, validation_sample = X_train, y_train
         
-        X, y = u.train_splits(training_sample)
-        full_forest = u.forest(X, y, N, F)
 
-        X_test, y_test = u.train_splits(validation_sample)
+        #X, y = u.train_splits(training_sample)
+        full_forest = u.forest(X_train, y_train, N, F)
+
+        # X_test, y_test = u.train_splits(validation_sample)
 
         averages = []
         results = {}
@@ -573,6 +575,7 @@ class MyRandomForestClassifier:
         for i in best_trees:
             final_forest.append(full_forest[i[0]])
         self.tree_list = final_forest
+        pass
 
     def predict(self, X_test, y_test):
         

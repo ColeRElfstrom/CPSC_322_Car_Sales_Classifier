@@ -257,6 +257,31 @@ def plot_prices(prices, ranges):
     plt.bar(xrng, class_counts)
     plt.xticks(xrng, ranges, rotation=45)
 
+def plot_all_att(table):
+    year = []
+    type = []
+    cylinders = []
+    drive = []
+    for row in table:
+        year.append(row[2])
+        type.append(row[3])
+        cylinders.append(row[4])
+        drive.append(row[5])
+    plot_atts(year, ["pre 1900", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020s"])
+    plot_atts(type, ["sedan", "pickup", "suv", "coupe", "other"])
+    plot_atts(cylinders, ["0", "1", "2", "3", "4", "5", "6", "8", "10", "12"])
+    plot_atts(drive, ["AWD", "FWD", "RWD", "4WD"])
+
+def plot_atts(data, att):
+    class_counts = []
+    for value in att:
+        class_counts.append(int(data.count(value)))
+    xrng = np.arange(len(att))
+    plt.figure()
+    plt.bar(xrng, class_counts)
+    plt.xticks(xrng, att, rotation=45)
+
+
 def compute_random_subset(values, num_values):
     values_copy = values[:] # shallow copy
     np.random.shuffle(values_copy) # in place shuffle

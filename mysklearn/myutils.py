@@ -46,7 +46,6 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     for att_value, att_partition in partitions.items():
         total_length += len(att_partition)
     case_3_total_length = len(case_3_instances)
-    print(list(partitions.keys()))
     for att_value in sorted(list(partitions.keys())):
         att_partition = partitions[att_value]
         value_subtree = ["Value", att_value]

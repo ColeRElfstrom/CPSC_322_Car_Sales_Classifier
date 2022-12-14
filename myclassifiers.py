@@ -574,8 +574,6 @@ class MyRandomForestClassifier:
             final_forest.append(full_forest[i[0]])
         self.tree_list = final_forest
 
-        pass
-
     def predict(self, X_test, header):
 
         y_pred = []

@@ -540,17 +540,9 @@ class MyRandomForestClassifier:
         self.F = F
 
         X, y = u.train_splits(table)
-        X_train, X_test, y_train, y_test = myevaluation.train_test_split(X, y, shuffle=True)
 
-        self.X_train = X_train
-        self.X_test = X_test
-        self.y_train = y_train
-        self.y_test = y_test
-
-        remainder_set = []
-        for i, row  in enumerate(X_train):
-            row.append(y_train[i])
-            remainder_set.append(row)
+        self.X_train = X
+        self.y_train = y
 
         
         training_sample, validation_sample = u.compute_bootstrapped_sample(table)
@@ -561,7 +553,9 @@ class MyRandomForestClassifier:
         for row in validation_sample:
             print(row)
         
-
+        X, y = u.train_splits(training_sample)
+        self.tree_list = u.forest(X, y, N, M)
+        
         pass
 
     def predict():

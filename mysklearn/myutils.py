@@ -1,5 +1,7 @@
 import numpy as np
 from mypytable import MyPyTable
+import copy
+from myclassifiers import MyDecisionTreeClassifier
 
 def parallel_sort(distances, indices):
     indices_result = [x for _, x in sorted(zip(distances, indices))]
@@ -33,7 +35,6 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     att_index = header.index(split_attribute)
     partitions = partition_instances(current_instances, att_index, attribute_domains)
     #print("partitions:", partitions) # partitions is a dictionary
-
     
     
     # for each partition, repeat unless one of the following occurs (base case)
@@ -248,3 +249,18 @@ def compute_random_subset(values, num_values):
     values_copy = values.copy() # shallow copy
     np.random.shuffle(values_copy) # inplace shuffle
     return values_copy[:num_values]
+
+def forest(X, y, N, F):
+    forest = []
+    for _ in range(N):
+        temp_X = []
+        temp_y = []
+        for _ in range(F): # since this can be a duplicate we have to check if the index is already in the temp subset
+            rand_index = np.random.randint(0, len(X))
+            if X[rand_index] not in temp_X:
+                temp_X.append(X[rand_index])
+                temp_y.append(y[rand_index])
+        tree = MyDecisionTreeClassifier()
+        tree.fit(temp_X, temp_y)
+        forest.append(tree)
+    return forest

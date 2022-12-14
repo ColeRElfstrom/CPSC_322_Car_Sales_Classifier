@@ -1,5 +1,6 @@
 from mysklearn import myutils as u
 import numpy as np
+from mysklearn import myevaluation
 class MySimpleLinearRegressor:
     """Represents a simple linear regressor.
 
@@ -431,7 +432,7 @@ class MyDecisionTreeClassifier:
         self.header = None
         self.tree = None
 
-    def fit(self, X_train, y_train):
+    def fit(self, X_train, y_train, F):
         """Fits a decision tree classifier to X_train and y_train using the TDIDT
         (top down induction of decision tree) algorithm.
 
@@ -465,7 +466,7 @@ class MyDecisionTreeClassifier:
         train = [X_train[i] + [y_train[i]] for i in range(len(X_train))]
         available_attributes = header.copy() # recall tdidt is going to be removin attributes from a list of available attributes
         # # python is pass by object reference!!
-        self.tree = u.tdidt(train, available_attributes, attribute_domains, -1, header)
+        self.tree = u.tdidt(train, available_attributes, attribute_domains, -1, header, F)
         self.header = header
         
 
@@ -526,17 +527,61 @@ class MyRandomForestClassifier:
         self.X_train = None
         self.y_train = None
         self.header = None
-        self.Fparam = None
-        self.Nparam = None
-        self.Mparam = None
+        self.F = None
+        self.N = None
+        self.M = None
         self.tree_list = []
 
 
-    def fit(Fparam, Nparam, Mparam):
+    def fit(self, table, N, M, F):
+
+        self.N = N
+        self.M = M
+        self.F = F
+
+        X, y = u.train_splits(table)
+
+        self.X_train = X
+        self.y_train = y
+
         
-        # TODO fix this
+        training_sample, validation_sample = u.compute_bootstrapped_sample(table)
+        
+        X, y = u.train_splits(training_sample)
+        full_forest = u.forest(X, y, N, F)
+
+        X_test, y_test = u.train_splits(validation_sample)
+
+        averages = []
+        results = {}
+        for i, tree in enumerate(full_forest):
+            tree_predicted = tree.predict(X_test)
+            results[i] = []
+            results[i].append(
+                myevaluation.accuracy_score(y_test, tree_predicted))
+            results[i].append(
+                myevaluation.binary_precision_score(y_test, tree_predicted))
+            results[i].append(
+                myevaluation.binary_recall_score(y_test, tree_predicted))
+            results[i].append(
+                myevaluation.binary_f1_score(y_test, tree_predicted))
+            averages.append([i, sum(results[i]) / len(results[i])])
+        sorted = averages.copy()
+        sorted.sort(key=lambda x: x[1], reverse=True)
+        best_trees = sorted[:M]
+        final_forest = []
+        for i in best_trees:
+            final_forest.append(full_forest[i[0]])
+        self.tree_list = final_forest
+
         pass
 
-    def predict():
-        # TODO fix this
-        pass
+    def predict(self, X_test, header):
+
+        y_pred = []
+        for row in X_test:           
+            predictions = []
+            for tree in self.tree_list:
+                predictions.append(u.tdidt_predict(tree.tree, row, header))
+            y_pred.append(max(predictions, key=predictions.count))
+        return y_pred

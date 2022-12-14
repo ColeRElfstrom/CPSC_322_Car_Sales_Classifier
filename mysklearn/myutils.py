@@ -1,5 +1,7 @@
 import numpy as np
 from mypytable import MyPyTable
+import copy
+from myclassifiers import MyDecisionTreeClassifier
 
 def parallel_sort(distances, indices):
     indices_result = [x for _, x in sorted(zip(distances, indices))]
@@ -15,7 +17,7 @@ def dist_for_categorical(v1, v2):
     else:
         return 1
 
-def tdidt(current_instances, available_attributes, attribute_domains, class_index, header, case_3_instances = None, case_3_available_attributes = None):
+def tdidt(current_instances, available_attributes, attribute_domains, class_index, header, F, case_3_instances = None, case_3_available_attributes = None):
     if case_3_instances == None:
         case_3_instances = current_instances
     if case_3_available_attributes == None:
@@ -23,6 +25,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     # basic approach (uses recursion!!):
     #print("available attributes: ", available_attributes)
     # select an attribute to split on
+    available_attributes = compute_random_subset(available_attributes, F)
     split_attribute = select_attribute(current_instances, available_attributes, class_index, header)
     #print("splitting on: ", split_attribute)
     available_attributes.remove(split_attribute)
@@ -33,7 +36,6 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     att_index = header.index(split_attribute)
     partitions = partition_instances(current_instances, att_index, attribute_domains)
     #print("partitions:", partitions) # partitions is a dictionary
-
     
     
     # for each partition, repeat unless one of the following occurs (base case)
@@ -44,6 +46,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
     for att_value, att_partition in partitions.items():
         total_length += len(att_partition)
     case_3_total_length = len(case_3_instances)
+    print(list(partitions.keys()))
     for att_value in sorted(list(partitions.keys())):
         att_partition = partitions[att_value]
         value_subtree = ["Value", att_value]
@@ -82,7 +85,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, class_inde
         # none of the base cases were true... recurse
         else:
             #print("recursing")
-            subtree = tdidt(att_partition, available_attributes.copy(), attribute_domains, class_index, header, current_instances.copy(), case_3_available_attributes.copy())
+            subtree = tdidt(att_partition, available_attributes.copy(), attribute_domains, class_index, header, F, current_instances.copy(), case_3_available_attributes.copy())
             value_subtree.append(subtree)
         if value_subtree != None:
             tree.append(value_subtree)
@@ -218,3 +221,48 @@ def create_X_train_for_auto_set_without_prices(auto_dataset):
         auto_dataset_explored.append([year_sold[i], make[i], year[i], body_type[i], num_cylinders[i], drive_type[i]])
 
     return auto_dataset_explored
+
+def train_splits(table):
+    """
+    Breaks table into X and y for random forrest classification
+            data: the table to split            
+    """
+    X = []
+    y = []
+    for row in table:
+        X.append(row[:-1])
+        y.append(row[-1])
+    
+    return X, y
+
+def compute_bootstrapped_sample(table):
+    n = len(table)
+    # np.random.randint(low, high) returns random integers from low (inclusive) to high (exclusive)
+    sampled_indexes = [np.random.randint(0, n) for _ in range(n)]
+    sample = [table[index] for index in sampled_indexes]
+    out_of_bag_indexes = [index for index in list(range(n)) if index not in sampled_indexes]
+    out_of_bag_sample = [table[index] for index in out_of_bag_indexes]
+    return sample, out_of_bag_sample
+
+
+def compute_random_subset(values, num_values):
+    # could use np.random.choice()
+    # I'll use np.random.shuffle() and slicing
+    values_copy = values.copy() # shallow copy
+    np.random.shuffle(values_copy) # inplace shuffle
+    return values_copy[:num_values]
+
+def forest(X, y, N, F):
+    forest = []
+    for _ in range(N):
+        temp_X = []
+        temp_y = []
+        for _ in range(F): # since this can be a duplicate we have to check if the index is already in the temp subset
+            rand_index = np.random.randint(0, len(X))
+            if X[rand_index] not in temp_X:
+                temp_X.append(X[rand_index])
+                temp_y.append(y[rand_index])
+        tree = MyDecisionTreeClassifier()
+        tree.fit(temp_X, temp_y, F)
+        forest.append(tree)
+    return forest
